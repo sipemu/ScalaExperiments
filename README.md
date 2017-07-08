@@ -1,6 +1,6 @@
 # Experiments with Scala, Spark, and Akka
 
-## Stock Prices (Spark Window Functions)
+## Spark Window Function on stock market data
 
 Experiments with with SPARK `sql.functions`:
 
