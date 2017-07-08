@@ -2,7 +2,7 @@
 
 ## Stock Prices (Spark Window Functions)
 
-Experiments with with SPARK 'sql.functions':
+Experiments with with SPARK `sql.functions`:
 
 - `lead`: is used for return calculation
 - `avg`: is used for moving average calculation
