@@ -2,7 +2,7 @@ package Financial
 
 import breeze.numerics.log
 import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.functions.{lead, col, asc, avg}
+import org.apache.spark.sql.functions.{lead, col, asc}
 import org.apache.spark.sql.expressions.Window
 
 /**
