@@ -2,6 +2,7 @@ import Financial.Financial
 
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types.{DataTypes, StructField, StructType}
+import org.apache.spark.sql.functions.monotonically_increasing_id
 
 /**
   * Stock Price Return Calculation
@@ -14,7 +15,7 @@ import org.apache.spark.sql.types.{DataTypes, StructField, StructType}
   */
 object StockExamples extends App {
   val spark = SparkSession.builder()
-    .master("[1]")
+    .master("local[*]")
     .appName("Return Calculation")
     .getOrCreate()
 
@@ -31,12 +32,16 @@ object StockExamples extends App {
     .option("delimiter", ";")
     .option("header", false)
     .schema(dataFileSchema)
-    .csv("./data/stockprice.csv").persist()
+    .csv("./data/stockprice.csv")
+    .withColumn("id", monotonically_increasing_id)
+    .persist()
+
 
   // Return Calculation
   val financial = new Financial
   val returnData = financial.calcReturn(priceData, "firm", "date", "price")
-  returnData.write
+  returnData.coalesce(1)
+    .write
     .option("delimiter", ";")
     .option("header", false)
     .csv("./data/stockprice_with_return.csv")
@@ -49,7 +54,7 @@ object StockExamples extends App {
     .csv("./data/stockprice_with_movingaverage.csv")
 
   // Cumulative Sum
-  val cumSum = financial.cumulativeSum(priceData, "firm", "date", "price")
+  val cumSum = financial.cumulativeSum(returnData, "firm", "date", "returns")
   cumSum.write
     .option("delimiter", ";")
     .option("header", false)

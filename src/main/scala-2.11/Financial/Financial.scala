@@ -1,6 +1,5 @@
 package Financial
 
-import breeze.numerics.log
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.{lead, col, asc}
 import org.apache.spark.sql.expressions.Window
@@ -13,7 +12,7 @@ class Financial extends Serializable {
   def calcReturn(df: DataFrame, partition: String, date: String, price: String): DataFrame = {
     // Define Window Function for Calculating log return by Firm
     val window = Window.partitionBy(partition).orderBy(asc(date))
-    val logReturn = log(col(price) / lead(col(price), -1).over(window))
+    val logReturn = org.apache.spark.sql.functions.log(col(price) / lead(col(price), -1).over(window))
 
     // Calculate log return
     df.withColumn("return", logReturn)
@@ -24,7 +23,7 @@ class Financial extends Serializable {
     val avg = org.apache.spark.sql.functions.avg(col(price)).over(window)
 
     // calculate moving window
-    df.withColumn("movingAverage_" + - 1 * start, avg)
+    df.withColumn("movingAverage", avg)
   }
 
   def cumulativeSum(df: DataFrame, partition: String, date: String, price: String): DataFrame = {
