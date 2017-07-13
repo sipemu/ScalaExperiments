@@ -1,7 +1,7 @@
 package Financial
 
-import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.functions.{lead, col, asc}
+import org.apache.spark.sql.{DataFrame, Dataset}
+import org.apache.spark.sql.functions.{asc, col, lead}
 import org.apache.spark.sql.expressions.Window
 
 /**
@@ -9,7 +9,7 @@ import org.apache.spark.sql.expressions.Window
   */
 class Financial extends Serializable {
 
-  def calcReturn(df: DataFrame, partition: String, date: String, price: String): DataFrame = {
+  def calcReturn[T](df: Dataset[T], partition: String, date: String, price: String): DataFrame = {
     // Define Window Function for Calculating log return by Firm
     val window = Window.partitionBy(partition).orderBy(asc(date))
     val logReturn = org.apache.spark.sql.functions.log(col(price) / lead(col(price), -1).over(window))
@@ -18,15 +18,15 @@ class Financial extends Serializable {
     df.withColumn("return", logReturn)
   }
 
-  def movingAverage(df: DataFrame, partition: String, date: String, price: String, start: Int): DataFrame = {
-    val window = Window.partitionBy(partition).orderBy(asc(date)).rangeBetween(start, -1)
+  def movingAverage[T](df: Dataset[T], partition: String, date: String, price: String, start: Int): DataFrame = {
+    val window = Window.partitionBy(partition).orderBy(asc(date)).rowsBetween(start, -1)
     val avg = org.apache.spark.sql.functions.avg(col(price)).over(window)
 
     // calculate moving window
     df.withColumn("movingAverage", avg)
   }
 
-  def cumulativeSum(df: DataFrame, partition: String, date: String, price: String): DataFrame = {
+  def cumulativeSum[T](df: Dataset[T], partition: String, date: String, price: String): DataFrame = {
     val window = Window.partitionBy(partition).orderBy(asc(date))
     val cumSum = org.apache.spark.sql.functions.sum(col(price)).over(window)
 

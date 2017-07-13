@@ -1,5 +1,5 @@
 import Financial.Financial
-
+import Models.{FinanceSchemas, FinancialData}
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types.{DataTypes, StructField, StructType}
 import org.apache.spark.sql.functions.monotonically_increasing_id
@@ -19,23 +19,18 @@ object StockExamples extends App {
     .appName("Return Calculation")
     .getOrCreate()
 
-  // Create file schema
-  val firm = StructField("firm", DataTypes.StringType)
-  val date = StructField("date", DataTypes.DateType)
-  val price = StructField("price", DataTypes.DoubleType)
-  val dataFields = Array(firm, date, price)
-  val dataFileSchema = StructType(dataFields)
+  import spark.implicits._
+  val dataFileSchema = FinanceSchemas.estSchema()
 
   // Read Data File with Specified Date Format
   val priceData = spark.read
-    .option("dateFormat", "dd.MM.yyyy")
+    .option("timestampFormat", "dd.MM.yyyy")
     .option("delimiter", ";")
     .option("header", false)
     .schema(dataFileSchema)
     .csv("./data/stockprice.csv")
-    .withColumn("id", monotonically_increasing_id)
+    .as[FinancialData]
     .persist()
-
 
   // Return Calculation
   val financial = new Financial
