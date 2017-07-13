@@ -15,3 +15,6 @@ The input data is in long format with 3 columns:
 - price.
 
 The file has no header is no header.
+
+
+## Send Data to Kinesis
