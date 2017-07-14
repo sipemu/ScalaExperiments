@@ -10,7 +10,7 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-streaming" % "2.1.0",
   "org.apache.spark" %% "spark-streaming-kinesis-asl" % "2.1.0",
   "com.typesafe"     % "config" % "1.2.0",
-  "com.amazonaws"    % "amazon-kinesis-client" % "1.7.6"
+  "com.amazonaws"    %  "aws-java-sdk-kinesis" % "1.11.160"
 )
 
 libraryDependencies ++= Seq(

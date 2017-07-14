@@ -2,7 +2,7 @@ package DataGenerator
 
 import java.nio.ByteBuffer
 
-import com.amazonaws.auth.{BasicAWSCredentials, DefaultAWSCredentialsProviderChain}
+import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.services.kinesis.AmazonKinesisClient
 import com.amazonaws.services.kinesis.model.PutRecordRequest
 
@@ -25,6 +25,8 @@ object KinesisWordGenerator {
                     wordsPerRecord: Int,
                     words: List[String]): Unit = {
 
+    // TODO: DEPRECATED
+    val awsCreds = new BasicAWSCredentials(awsAccessKeyId, awsSecretKey)
     val kinesisClient = new AmazonKinesisClient(new BasicAWSCredentials(awsAccessKeyId, awsSecretKey))
     kinesisClient.setEndpoint(endpoint)
 
