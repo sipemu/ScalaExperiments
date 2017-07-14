@@ -1,8 +1,6 @@
 import Financial.Financial
 import Models.{FinanceSchemas, FinancialData}
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.types.{DataTypes, StructField, StructType}
-import org.apache.spark.sql.functions.monotonically_increasing_id
+import org.apache.spark.sql.{SaveMode, SparkSession}
 
 /**
   * Stock Price Return Calculation
@@ -37,20 +35,25 @@ object StockExamples extends App {
   val returnData = financial.calcReturn(priceData, "firm", "date", "price")
   returnData.coalesce(1)
     .write
+    .mode(SaveMode.Overwrite)
     .option("delimiter", ";")
     .option("header", false)
     .csv("./data/stockprice_with_return.csv")
 
   // Moving Average
   val movingAverage = financial.movingAverage(priceData, "firm", "date", "price", -5)
-  movingAverage.write
+  movingAverage.coalesce(1)
+    .write
+    .mode(SaveMode.Overwrite)
     .option("delimiter", ";")
     .option("header", false)
     .csv("./data/stockprice_with_movingaverage.csv")
 
   // Cumulative Sum
   val cumSum = financial.cumulativeSum(returnData, "firm", "date", "returns")
-  cumSum.write
+  cumSum.coalesce(1)
+    .write
+    .mode(SaveMode.Overwrite)
     .option("delimiter", ";")
     .option("header", false)
     .csv("./data/stockprice_with_cumulativeSum.csv")

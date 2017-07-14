@@ -15,7 +15,7 @@ class Financial extends Serializable {
     val logReturn = org.apache.spark.sql.functions.log(col(price) / lead(col(price), -1).over(window))
 
     // Calculate log return
-    df.withColumn("return", logReturn)
+    df.withColumn("returns", logReturn)
   }
 
   def movingAverage[T](df: Dataset[T], partition: String, date: String, price: String, start: Int): DataFrame = {
