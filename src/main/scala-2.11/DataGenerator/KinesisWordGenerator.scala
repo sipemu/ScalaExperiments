@@ -27,7 +27,7 @@ object KinesisWordGenerator {
 
     // TODO: DEPRECATED
     val awsCreds = new BasicAWSCredentials(awsAccessKeyId, awsSecretKey)
-    val kinesisClient = new AmazonKinesisClient(new BasicAWSCredentials(awsAccessKeyId, awsSecretKey))
+    val kinesisClient = new AmazonKinesisClient(awsCreds)
     kinesisClient.setEndpoint(endpoint)
 
     for (i <- 1 to 10) {

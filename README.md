@@ -14,7 +14,14 @@ The input data is in long format with 3 columns:
 - date with format `dd.MM.yyyy`, and
 - price.
 
-The file has no header is no header.
+The input data file has no header.
 
 
 ## Send Data to Kinesis
+
+This small projects includes a word data generator and pushes a random sequence wof words to a defined AWS kinesis node. 
+
+## Bahn Developer API Call
+
+In this small project a endpoint on `https://developer.deutschebahn.com/` is called and the data is fetched.
+
