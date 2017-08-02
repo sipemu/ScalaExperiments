@@ -13,5 +13,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws"    %  "aws-java-sdk-kinesis" % "1.11.160",
   "com.amazonaws"    % "amazon-kinesis-client" % "1.7.3",
   "com.typesafe.play" %% "play-json" % "2.5.1",
-  "org.scalaj"        %% "scalaj-http" % "2.3.0"
+  "org.scalaj"        %% "scalaj-http" % "2.3.0",
+  "org.ddahl" %% "rscala" % "2.2.2"
 )
+

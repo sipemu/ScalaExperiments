@@ -26,6 +26,7 @@ class Financial extends Serializable {
     df.withColumn("movingAverage", avg)
   }
 
+
   def cumulativeSum[T](df: Dataset[T], partition: String, date: String, price: String): DataFrame = {
     val window = Window.partitionBy(partition).orderBy(asc(date))
     val cumSum = org.apache.spark.sql.functions.sum(col(price)).over(window)
